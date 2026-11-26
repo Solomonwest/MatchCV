@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}{{ match.job_title }} — MatchCV{% endblock %}
+{% block content %}
+  <div class="card overflow-hidden">
+    <div class="grid gap-7 p-6 sm:p-8 lg:grid-cols-[1.6fr_1fr] lg:items-start">
+      <div class="min-w-0">
+        <p class="eyebrow">{{ match.verdict }}</p>
+        <h1 class="page-title mt-3">{{ match.job_title }}</h1>
+        <p class="meta mt-2">
+          {{ match.company|default:"Company not given" }} · {{ match.cv.title }} · {{ match.created_at|date:"M j, Y" }}
+        </p>
+        <p class="mt-4 max-w-2xl text-sm leading-relaxed text-ink/80">{{ match.summary }}</p>
+        <div class="mt-6 flex flex-wrap gap-2">
+          <a href="{% url 'dashboard' %}" class="btn btn-primary">Match another role</a>
+          <a href="{% url 'cv_detail' match.cv.pk %}" class="btn btn-secondary">Open the CV used</a>
+        </div>
+      </div>
+
+      <div class="card-accent p-5">
+        <p class="eyebrow">Overall fit</p>
+        <p class="mt-2 flex items-baseline gap-1">
+          <span class="score-num text-ink">{{ match.overall_score }}</span>
+          <span class="text-sm font-medium text-mute">/100</span>
+        </p>
+        <div class="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-white">
+          <div class="h-full rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#6D28D9]" style="width: {{ match.overall_score }}%"></div>
+        </div>
+        <p class="meta mt-3">{{ match.verdict }} · scored against the role's must-haves.</p>
+      </div>
+    </div>
+  </div>
+
+  {% if match.fit_evidence %}
+    <section class="card mt-6 p-6 sm:p-7">
+      <h2 class="section-title">Requirement by requirement</h2>
+      <ul class="mt-3 divide-y divide-line">
+        {% for row in match.fit_evidence %}
+          <li class="py-3.5">
+            <p class="text-sm font-semibold text-ink">{{ row.requirement }}</p>
+            <p class="mt-1 text-sm leading-relaxed text-ink/70">{{ row.evidence }}</p>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  <div class="mt-6 grid gap-4 md:grid-cols-2">
+    <section class="card p-6">
+      <h2 class="section-title">What already matches</h2>
+      <ul class="mt-3 space-y-2 text-sm leading-relaxed text-ink/75">
+        {% for skill in match.matched_skills %}<li class="flex gap-2"><span class="text-brand">—</span><span>{{ skill }}</span></li>{% empty %}<li>No overlap found.</li>{% endfor %}
+      </ul>
+    </section>
+
+    <section class="card p-6">
+      <h2 class="section-title">Requirements not evidenced</h2>
+      <ul class="mt-3 space-y-3.5 text-sm leading-relaxed text-ink/75">
+        {% for item in match.missing_skills %}
+          <li>
+            <span class="font-semibold text-ink">{{ item.skill }}</span>
+            <span class="pill ml-1">{{ item.priority }}</span>
+            <br>{{ item.how_to_close }}
+          </li>
+        {% empty %}<li>Nothing important is missing.</li>{% endfor %}
+      </ul>
+    </section>
+
+    {% if match.critique %}
+      <section class="card p-6">
+        <h2 class="section-title">Critique of the CV itself</h2>
+        <ul class="mt-3 space-y-3.5 text-sm leading-relaxed text-ink/75">
+          {% for item in match.critique %}
+            <li>
+              <span class="font-semibold text-ink">{{ item.area }}</span>
+              <span class="pill ml-1">{{ item.rating }}</span>
+              <br>{{ item.note }}
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+
+    <section class="card p-6">
+      <h2 class="section-title">Where it stands out</h2>
+      <ul class="mt-3 list-disc space-y-1 pl-4 text-sm leading-relaxed text-ink/75">
+        {% for item in match.strengths %}<li>{{ item }}</li>{% empty %}<li>Nothing clearly stands out yet.</li>{% endfor %}
+      </ul>
+    </section>
+
+    <section class="card p-6">
+      <h2 class="section-title">Keywords absent from your CV</h2>
+      <p class="mt-3 flex flex-wrap gap-2">
+        {% for keyword in match.keyword_gaps %}
+          <span class="tag">{{ keyword }}</span>
+        {% empty %}<span class="meta">All key terms appear in your CV.</span>{% endfor %}
+      </p>
+    </section>
+
+    <section class="card p-6">
+      <h2 class="section-title">Depth and experience gaps</h2>
+      <ul class="mt-3 list-disc space-y-1 pl-4 text-sm leading-relaxed text-ink/75">
+        {% for item in match.experience_gaps %}<li>{{ item }}</li>{% empty %}<li>No experience gaps were flagged.</li>{% endfor %}
+      </ul>
+    </section>
+  </div>
+
+  <section class="card-accent mt-6 p-6 sm:p-7">
+    <h2 class="section-title">Do this before you apply</h2>
+    <ol class="mt-4 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-ink/85">
+      {% for item in match.recommendations %}<li>{{ item }}</li>{% empty %}<li>No actions were suggested.</li>{% endfor %}
+    </ol>
+  </section>
+{% endblock %}

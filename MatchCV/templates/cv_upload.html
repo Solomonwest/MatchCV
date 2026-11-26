@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Upload and enhance — MatchCV{% endblock %}
+{% block content %}
+  <p class="eyebrow">Step 1 · Enhancement</p>
+  <h1 class="page-title mt-3">Upload your original CV.</h1>
+  <p class="lede">
+    We rewrite it into one polished, general-purpose CV using only what is already in your original. Nothing is invented.
+    The result is saved to your profile and becomes the version you match roles with.
+  </p>
+
+  <div class="mt-10 grid gap-6 lg:grid-cols-[1.55fr_1fr] lg:items-start">
+    <form method="post" enctype="multipart/form-data" class="card p-6 sm:p-7">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="mb-5 border-l-2 border-red-500 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+      <div class="space-y-5">
+        {% for field in form %}
+          <div>
+            <label for="{{ field.id_for_label }}" class="field-label">{{ field.label }}</label>
+            <div class="mt-1.5">{{ field }}</div>
+            {% if field.help_text %}<p class="meta mt-1">{{ field.help_text }}</p>{% endif %}
+            {% for error in field.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+      <div class="mt-7 flex flex-wrap items-center gap-3">
+        <button type="submit" class="btn btn-primary">Enhance my CV</button>
+        <span class="meta">PDF or DOCX, or paste the text.</span>
+      </div>
+    </form>
+
+    <aside class="card-accent p-6">
+      <p class="eyebrow">What happens next</p>
+      <ol class="mt-4 space-y-3 text-sm leading-relaxed text-ink/80">
+        <li><span class="font-semibold text-ink">1.</span> We read the text of your original CV.</li>
+        <li><span class="font-semibold text-ink">2.</span> It is reordered, tightened and reformatted, never invented.</li>
+        <li><span class="font-semibold text-ink">3.</span> The result is saved to your profile, ready to match.</li>
+      </ol>
+      <p class="meta mt-5">Takes up to about 30 seconds.</p>
+    </aside>
+  </div>
+{% endblock %}

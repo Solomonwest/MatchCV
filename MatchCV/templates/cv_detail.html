@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load md %}
+{% block title %}{{ cv.title }} — MatchCV{% endblock %}
+{% block content %}
+  <div class="flex flex-wrap items-start justify-between gap-4">
+    <div class="min-w-0">
+      <p class="eyebrow">Enhanced CV</p>
+      <h1 class="page-title mt-3">{{ cv.title }}</h1>
+      <p class="meta mt-2">
+        {{ cv.headline }}{% if cv.is_default %} · <span class="pill">Default for matching</span>{% endif %}
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <a href="{% url 'dashboard' %}" class="btn btn-primary">Match a role</a>
+      <a href="{% url 'cv_list' %}" class="btn btn-secondary">All CVs</a>
+    </div>
+  </div>
+
+  {% if cv.summary %}
+    <p class="mt-6 max-w-2xl border-l-2 border-line pl-4 text-sm leading-relaxed text-ink/80">{{ cv.summary }}</p>
+  {% endif %}
+
+  <div class="mt-9 grid gap-6 lg:grid-cols-[1.7fr_1fr] lg:items-start">
+    <article class="card p-6 sm:p-8">
+      <div class="prose-cv text-sm leading-relaxed text-ink/85">{{ cv.content|markdown }}</div>
+    </article>
+
+    <aside class="space-y-4 lg:sticky lg:top-24">
+      {% if cv.improvements %}
+        <section class="card p-5">
+          <h2 class="section-title">What changed and why</h2>
+          <ul class="mt-3 space-y-3 text-sm leading-relaxed text-ink/75">
+            {% for item in cv.improvements %}
+              <li>
+                <span class="font-semibold text-ink">{{ item.what }}</span><br>
+                {{ item.why }}
+              </li>
+            {% endfor %}
+          </ul>
+        </section>
+      {% endif %}
+
+      {% if cv.strengths %}
+        <section class="card p-5">
+          <h2 class="section-title">What already works</h2>
+          <ul class="mt-3 list-disc space-y-1 pl-4 text-sm leading-relaxed text-ink/75">
+            {% for item in cv.strengths %}<li>{{ item }}</li>{% endfor %}
+          </ul>
+        </section>
+      {% endif %}
+
+      {% if cv.gaps_left %}
+        <section class="card-accent p-5">
+          <h2 class="section-title">Still missing</h2>
+          <p class="meta mt-1">Add these yourself if they are true. We will not invent them.</p>
+          <ul class="mt-3 list-disc space-y-1 pl-4 text-sm leading-relaxed text-ink/75">
+            {% for gap in cv.gaps_left %}<li>{{ gap }}</li>{% endfor %}
+          </ul>
+        </section>
+      {% endif %}
+    </aside>
+  </div>
+{% endblock %}

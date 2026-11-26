@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Create an account — MatchCV{% endblock %}
+{% block content %}
+  <div class="mx-auto max-w-2xl">
+    <p class="eyebrow">Get started</p>
+    <h1 class="page-title mt-3">Create an account</h1>
+    <p class="lede">Upload a CV, enhance it, then check it against any role. It takes one minute.</p>
+    <form method="post" class="card mt-8 p-6 sm:p-7">
+      {% csrf_token %}
+      <div class="grid gap-5 sm:grid-cols-2">
+        {% for field in form %}
+          <div>
+            <label for="{{ field.id_for_label }}" class="field-label">{{ field.label }}</label>
+            <div class="mt-1.5">{{ field }}</div>
+            {% if field.help_text %}<div class="helptext">{{ field.help_text|safe }}</div>{% endif %}
+            {% for error in field.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+      <button type="submit" class="btn btn-primary btn-block mt-7">
+        Create my account
+      </button>
+    </form>
+    <p class="meta mt-5 text-center">
+      Already registered? <a class="link-accent" href="{% url 'login' %}">Sign in</a>
+    </p>
+  </div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Profile — MatchCV{% endblock %}
+{% block content %}
+  <p class="eyebrow">Your account</p>
+  <h1 class="page-title mt-3">{{ user.display_name }}</h1>
+  <p class="meta mt-2">
+    {{ user.email|default:"No email on file" }} · Member since {{ user.date_joined|date:"M j, Y" }}
+  </p>
+  <p class="lede">
+    These details are given to the model as context when it polishes a CV and when it reads a role.
+    It never invents experience from them.
+  </p>
+
+  <div class="mt-9 grid gap-6 lg:grid-cols-[1.6fr_1fr] lg:items-start">
+    <form method="post" class="card p-6 sm:p-7">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="mb-5 border-l-2 border-red-500 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+      <div class="grid gap-5 sm:grid-cols-2">
+        {% for field in form %}
+          <div class="{% if field.name == 'target_roles' or field.name == 'career_preferences' %}sm:col-span-2{% endif %}">
+            <label for="{{ field.id_for_label }}" class="field-label">{{ field.label }}</label>
+            <div class="mt-1.5">{{ field }}</div>
+            {% if field.help_text %}<p class="meta mt-1">{{ field.help_text }}</p>{% endif %}
+            {% for error in field.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+      <button type="submit" class="btn btn-primary mt-7">Save profile</button>
+    </form>
+
+    <aside class="card-accent p-6">
+      <p class="eyebrow">Shortcuts</p>
+      <div class="mt-4 space-y-3 text-sm">
+        <a href="{% url 'cv_list' %}" class="link-accent block">My CVs</a>
+        <a href="{% url 'dashboard' %}" class="link-quiet block">Match a role</a>
+        <a href="{% url 'history' %}" class="link-quiet block">Match history</a>
+        <a href="{% url 'password_change' %}" class="link-quiet block">Change your password</a>
+      </div>
+    </aside>
+  </div>
+{% endblock %}

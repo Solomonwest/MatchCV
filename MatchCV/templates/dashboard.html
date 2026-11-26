@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Match a role — MatchCV{% endblock %}
+{% block content %}
+  <p class="eyebrow">Step 2 · Role fit</p>
+  <h1 class="page-title mt-3">See how your enhanced CV fits the role.</h1>
+  <p class="lede">
+    Matching runs on a CV you have already enhanced in your profile, so the analysis reads the strongest version of your experience.
+  </p>
+
+  {% if enhanced %}
+    <div class="mt-10 grid gap-6 lg:grid-cols-[1.55fr_1fr] lg:items-start">
+      <form method="post" class="card p-6 sm:p-7">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+          <div class="mb-5 border-l-2 border-red-500 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
+        <div class="space-y-5">
+          {% for field in form %}
+            <div>
+              <label for="{{ field.id_for_label }}" class="field-label">{{ field.label }}</label>
+              <div class="mt-1.5">{{ field }}</div>
+              {% if field.help_text %}<p class="meta mt-1">{{ field.help_text }}</p>{% endif %}
+              {% for error in field.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}
+            </div>
+          {% endfor %}
+        </div>
+        <div class="mt-7 flex flex-wrap items-center gap-3">
+          <button type="submit" class="btn btn-primary">Analyse fit</button>
+          <span class="meta">Takes up to about 30 seconds.</span>
+        </div>
+      </form>
+
+      <aside class="card-accent p-6">
+        <p class="eyebrow">What you get back</p>
+        <ul class="mt-4 space-y-3 text-sm leading-relaxed text-ink/80">
+          <li>Every must-have checked, with the CV line that proves it.</li>
+          <li>Gaps marked critical, important or nice to have.</li>
+          <li>The keywords the role uses that your CV never does.</li>
+          <li>An action plan to work through before you apply.</li>
+        </ul>
+        <a href="{% url 'cv_list' %}" class="link-accent mt-5 inline-block text-sm">Review your saved CVs</a>
+      </aside>
+    </div>
+  {% else %}
+    <div class="card-dashed mt-10 p-7">
+      <h2 class="section-title">Enhance a CV first</h2>
+      <p class="lede mt-2">
+        Role matching only runs on an enhanced CV saved to your profile. Upload your original CV and we will polish it first.
+      </p>
+      <a href="{% url 'cv_upload' %}" class="btn btn-primary mt-5">Upload and enhance</a>
+    </div>
+  {% endif %}
+{% endblock %}

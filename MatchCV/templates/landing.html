@@ -1,0 +1,76 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fbfaff">
+  <meta name="description" content="See how your CV fits a role, find the gaps that matter, and apply with a clearer plan.">
+  <title>MatchCV — Apply with clarity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{% static 'matcher/site.css' %}">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav shell" aria-label="Main navigation">
+      <a class="brand" href="{% url 'dashboard' %}" aria-label="CV Match home"><span class="brand-mark" aria-hidden="true">M</span><span>Match<span class="brand-light">CV</span></span></a>
+      <div class="nav-links"><a href="#how-it-works">How it works</a><a href="#features">Your analysis</a></div>
+      <a class="button button-dark nav-cta" href="{% url 'dashboard' %}">Get started <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero shell">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-dot"></span> A clearer way to find your fit</p>
+        <h1>Apply with<br>more <span class="headline-accent">certainty.</span></h1>
+        <p class="hero-intro">Know where you stand before you apply. Match your CV to a role, uncover the gaps that matter, and make your next move count.</p>
+        <div class="hero-actions"><a class="button button-pink" href="{% url 'dashboard' %}">Find your fit <span aria-hidden="true">↗</span></a><a class="text-link" href="#how-it-works">See how it works <span aria-hidden="true">↓</span></a></div>
+        <div class="trust-line"><div class="avatar-stack" aria-hidden="true"><span>J</span><span>M</span><span>A</span><span>+</span></div><p>Make every application more intentional.</p></div>
+      </div>
+
+      <div class="hero-visual" aria-label="Example CV match analysis">
+        <div class="visual-glow" aria-hidden="true"></div>
+        <div class="analysis-window">
+          <div class="window-top"><div class="window-dots"><i></i><i></i><i></i></div><span>ROLE MATCH / 01</span><span class="live-state"><i></i> ANALYSIS READY</span></div>
+          <div class="analysis-content">
+            <div class="role-row"><div><p class="micro-label">YOUR CV × OPEN ROLE</p><h2>Product Designer</h2><p class="role-company">Northstar Studio <span>·</span> Remote</p></div><span class="role-icon" aria-hidden="true">✳</span></div>
+            <div class="score-layout"><div class="score-ring"><div><strong>78</strong><span>FIT SCORE</span></div></div><div class="score-note"><span class="status-pill">GOOD ALIGNMENT</span><p>Your experience maps well to this role. A few focused updates could make your application stronger.</p></div></div>
+            <div class="match-divider"></div>
+            <div class="skills-heading"><span>SKILL ALIGNMENT</span><span>5 OF 7</span></div>
+            <div class="skill-list"><div class="skill-row"><span class="skill-check">✓</span><span>Figma & prototyping</span><span class="skill-match">MATCH</span></div><div class="skill-row"><span class="skill-check">✓</span><span>Design systems</span><span class="skill-match">MATCH</span></div><div class="skill-row"><span class="skill-gap">+</span><span>Accessibility testing</span><span class="skill-missing">GAP</span></div></div>
+            <div class="insight-strip"><span aria-hidden="true">✦</span><p><strong>Your next move</strong> Add a measurable accessibility project to your portfolio.</p><span class="insight-arrow" aria-hidden="true">↗</span></div>
+          </div>
+          <div class="window-foot"><span>PRIVATE BY DESIGN</span><span>MATCH CV <b>✳</b></span></div>
+        </div>
+        <div class="float-note"><span class="float-icon" aria-hidden="true">↗</span><span><strong>Not just a score.</strong><small>A plan you can act on.</small></span></div>
+      </div>
+      <div class="hero-caption"><span>01 — YOUR NEXT APPLICATION</span><span>LESS GUESSWORK. MORE DIRECTION.</span></div>
+    </section>
+
+    <section class="intro-band" id="what-you-get">
+      <div class="shell intro-inner"><p class="eyebrow eyebrow-dark">THE APPLICATION, RECONSIDERED</p><div class="intro-grid"><h2>Good applications<br>start with <span>knowing.</span></h2><p>Job descriptions can feel like a moving target. MatchCV puts the role beside your experience, so you can see what already fits and what deserves your attention.</p></div></div>
+    </section>
+
+    <section class="feature-section shell" id="features">
+      <div class="section-heading"><div><p class="eyebrow">A BETTER READ ON THE ROLE</p><h2>Clarity at every step.</h2></div><p>From first look to final polish, keep your effort focused on the work that makes a difference.</p></div>
+      <div class="feature-grid">
+        <article class="feature-card feature-card-wide"><div class="feature-topline"><span>01 / ANALYZE</span><span class="feature-symbol" aria-hidden="true">◉</span></div><div class="mini-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><h3>See the whole picture.</h3><p>Compare your CV with a specific job description. Get a transparent fit summary across skills, experience, and role-specific keywords.</p></article>
+        <article class="feature-card"><div class="feature-topline"><span>02 / IMPROVE</span><span class="feature-symbol feature-symbol-pink" aria-hidden="true">✳</span></div><div class="keyword-chips" aria-hidden="true"><span>Research</span><span class="chip-match">Strategy ✓</span><span>Accessibility</span></div><h3>Know what to build.</h3><p>See missing skills and absent keywords, then get practical suggestions for what to strengthen or learn next.</p></article>
+        <article class="feature-card feature-card-pink"><div class="feature-topline"><span>03 / TAILOR</span><span class="feature-symbol" aria-hidden="true">↗</span></div><div class="tailor-preview" aria-hidden="true"><span>BEFORE</span><i></i><i></i><i></i><span>ROLE-READY</span><b>+</b></div><h3>Tailor with intention.</h3><p>Shape your existing CV around a specific opportunity while keeping your real experience at the center.</p></article>
+      </div>
+    </section>
+
+    <section class="process-section" id="how-it-works"><div class="shell process-inner"><div class="process-heading"><p class="eyebrow eyebrow-dark">A SIMPLE PLACE TO START</p><h2>One role. One honest read.</h2><p>No more guessing what a hiring team might be looking for. Start with the CV you have and the role you want.</p></div><div class="steps"><article class="step"><span class="step-number">01</span><div><h3>Bring your CV</h3><p>Upload a PDF or DOC file. Keep multiple versions together as your goals evolve.</p></div><span class="step-arrow" aria-hidden="true">↗</span></article><article class="step"><span class="step-number">02</span><div><h3>Add the role</h3><p>Paste the full job description so your analysis reflects what this employer actually asks for.</p></div><span class="step-arrow" aria-hidden="true">↗</span></article><article class="step"><span class="step-number">03</span><div><h3>Choose your next move</h3><p>Review your matches and gaps, then decide whether to apply, build a skill, or tailor your CV.</p></div><span class="step-arrow" aria-hidden="true">↗</span></article></div></div></section>
+
+    <section class="privacy-section shell"><div class="privacy-mark" aria-hidden="true">⌑</div><div><p class="eyebrow">YOUR CAREER IS YOURS</p><h2>Your work stays yours.</h2><p>Your CVs, role descriptions, and match history are private to your account. Review previous analyses whenever you need a reminder of how far you have come.</p></div><span class="privacy-tag">PRIVATE BY DEFAULT <i></i></span></section>
+
+    <section class="closing-section" id="get-started"><div class="closing-orbit" aria-hidden="true"></div><div class="shell closing-content"><p class="eyebrow eyebrow-dark">YOUR NEXT MOVE STARTS HERE</p><h2>Make the next<br>application <span>count.</span></h2><p>Get a clearer read on your fit, and a more useful plan for what comes next.</p><a class="button button-dark" href="{% url 'dashboard' %}">Start with your CV <span aria-hidden="true">↗</span></a><span class="closing-footnote">A more considered way to apply.</span></div></section>
+  </main>
+
+  <footer class="footer shell"><a class="brand" href="{% url 'dashboard' %}"><span class="brand-mark" aria-hidden="true">M</span><span>Match<span class="brand-light">CV</span></span></a><span>Apply with clarity.</span><span>© MatchCV </span></footer>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}History — MatchCV{% endblock %}
+{% block content %}
+  <p class="eyebrow">History</p>
+  <h1 class="page-title mt-3">Every role you have checked</h1>
+
+  <ul class="card mt-9 divide-y divide-line overflow-hidden">
+    {% for match in matches %}
+      <li>
+        <a href="{% url 'match_detail' match.pk %}" class="row-hover flex items-center gap-4 px-5 py-4">
+          <span class="w-14 shrink-0 text-lg font-semibold tabular-nums text-brandink">{{ match.overall_score }}<span class="text-xs font-medium text-mute">%</span></span>
+          <span class="min-w-0 flex-1">
+            <span class="block truncate text-sm font-semibold">{{ match.job_title }}</span>
+            <span class="meta block truncate">
+              {{ match.company|default:"No company given" }} · {{ match.cv.title }} · {{ match.created_at|date:"M j, Y" }}
+            </span>
+          </span>
+          <span class="pill hidden shrink-0 sm:inline-flex">{{ match.verdict }}</span>
+        </a>
+      </li>
+    {% empty %}
+      <li class="px-5 py-12 text-center text-sm text-mute">
+        No matches yet. <a class="link-accent" href="{% url 'dashboard' %}">Run your first match</a>.
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

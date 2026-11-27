@@ -8,6 +8,11 @@ deployment. It is never exposed to a template, a form or the browser.
 import json
 
 from django.conf import settings
+import json
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class AIError(Exception):
@@ -22,29 +27,52 @@ def _client():
             "restart the server."
         )
     from google import genai
+    from google.genai import types
 
-    return genai.Client(api_key=settings.GEMINI_API_KEY)
+    return genai.Client(api_key=settings.GEMINI_API_KEY,
+                        http_options=types.HttpOptions(api_version="v1beta"),
+                        )
 
 
 def complete_json(system_prompt, user_prompt, required_keys):
     """Ask the model for one JSON object and reject anything malformed."""
     client = _client()
-    from google.genai import types
+    from google.genai import errors, types
 
-    try:
-        response = client.models.generate_content(
-            model=settings.GEMINI_MODEL,
-            contents=user_prompt,
-            config=types.GenerateContentConfig(
-                system_instruction=system_prompt,
-                temperature=0.2,
-                response_mime_type="application/json",
-            ),
-        )
-    except Exception as exc:  # network, auth, quota, rate limit
+    # plain Python, outside the API call: main model first, then the fallback
+    model_names = [settings.GEMINI_MODEL]
+    fallback = getattr(settings, "GEMINI_FALLBACK_MODEL", "")
+    if fallback and fallback != settings.GEMINI_MODEL:
+        model_names.append(fallback)
+
+    response = None
+    last_exc = None
+    for model in model_names:
+        try:
+            response = client.models.generate_content(
+                model=model,
+                contents=user_prompt,
+                config=types.GenerateContentConfig(
+                    system_instruction=system_prompt,
+                    temperature=0.2,
+                    response_mime_type="application/json",
+                ),
+            )
+            break  # success, stop trying models
+        except errors.ServerError as exc:  # 500/503 overloaded: try the next model
+            last_exc = exc
+            logger.warning("Gemini model %s unavailable: %s", model, exc)
+        except Exception as exc:  # network, auth, quota: a fallback won't help
+            logger.exception("Gemini request failed")
+            print("GEMINI ERROR:", type(exc).__name__, exc)  # temporary, remove later
+            raise AIError(
+                "Gemini could not complete the request. Check the key and try again in a moment."
+            ) from exc
+
+    if response is None:
         raise AIError(
-            "Gemini could not complete the request. Check the key and try again in a moment."
-        ) from exc
+            "Gemini is busy right now. Please try again in a minute."
+        ) from last_exc
 
     raw = (response.text or "").strip()
     try:
